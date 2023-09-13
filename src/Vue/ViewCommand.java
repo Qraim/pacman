@@ -1,0 +1,105 @@
+package Vue;
+import Modele.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+import java.util.Objects;
+
+public class ViewCommand implements PropertyChangeListener {
+    private JFrame frame;
+    private JButton initButton;
+    private JButton startButton;
+    private JButton pauseButton;
+    private JButton stepbutton;
+    private JSlider speedSlider;
+    private JLabel turnLabel;
+    private Game simpleGame;
+
+    public ViewCommand(Game simpleGame) {
+        this.simpleGame = simpleGame;
+
+        frame = new JFrame("Commandes");
+        frame.setSize(new Dimension(600, 400));
+        frame.setLayout(new FlowLayout());
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        initButton = new JButton("Initialiser");
+        startButton = new JButton("Lancer");
+        pauseButton = new JButton("Pause");
+        stepbutton = new JButton("Step");
+
+        initButton.setIcon(new ImageIcon("./Icons/icon_restart.png"));
+        startButton.setIcon(new ImageIcon("./Icons/icon_run.png"));
+        stepbutton.setIcon(new ImageIcon("./Icons/icon_step.png"));
+        pauseButton.setIcon(new ImageIcon("./Icons/icon_pause.png"));
+
+        pauseButton.setEnabled(false);
+        initButton.setEnabled(false);
+
+        speedSlider = new JSlider(1, 10, 5);
+        speedSlider.setPaintTicks(true);
+        speedSlider.setPaintLabels(true);
+        turnLabel = new JLabel("Tour: 0");
+
+        frame.add(initButton);
+        frame.add(startButton);
+        frame.add(pauseButton);
+        frame.add(stepbutton);
+        frame.add(speedSlider);
+        frame.add(turnLabel);
+
+        initButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                simpleGame.init();
+
+            }
+        });
+
+        startButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                simpleGame.launch();
+                pauseButton.setEnabled(true);
+                initButton.setEnabled(true);
+            }
+        });
+
+        pauseButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                simpleGame.pause();
+            }
+        });
+
+        stepbutton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                simpleGame.step();
+            }
+        });
+
+        ActionListener updateLabel = new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                turnLabel.setText("Tour: " + simpleGame.getTurn());
+                simpleGame.setTime(1000 / speedSlider.getValue());
+            }
+        };
+
+        // Mettre à jour le label et le temps toutes les 100 ms
+        new Timer(100, updateLabel).start();
+
+        frame.setVisible(true);
+
+        simpleGame.addPropertyChangeListener(this);
+
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if ("turn".equals(evt.getPropertyName())) {
+            turnLabel.setText("Tour: " + evt.getNewValue());
+        }
+    }
+}
