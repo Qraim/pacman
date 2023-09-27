@@ -18,6 +18,8 @@ public class ViewCommand implements PropertyChangeListener {
     private JButton stepbutton;
     private JSlider speedSlider;
     private JLabel turnLabel;
+
+    private JLabel pointlabel;
     private Game simpleGame;
 
     public ViewCommand(Game simpleGame) {
@@ -46,12 +48,16 @@ public class ViewCommand implements PropertyChangeListener {
         speedSlider.setPaintLabels(true);
         turnLabel = new JLabel("Tour: 0");
 
+        pointlabel = new JLabel("Point : " + simpleGame.Points);
+
+
         frame.add(initButton);
         frame.add(startButton);
         frame.add(pauseButton);
         frame.add(stepbutton);
         frame.add(speedSlider);
         frame.add(turnLabel);
+        frame.add(pointlabel);
 
         initButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -87,8 +93,14 @@ public class ViewCommand implements PropertyChangeListener {
             }
         };
 
-        // Mettre à jour le label et le temps toutes les 100 ms
+        ActionListener updatepoint = new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                pointlabel.setText("Points : " + simpleGame.Points);
+            }
+        };
+
         new Timer(100, updateLabel).start();
+        new Timer(100, updatepoint).start();
 
         frame.setVisible(true);
 

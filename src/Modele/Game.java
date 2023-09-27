@@ -8,6 +8,9 @@ public abstract class Game implements Runnable{
 
     private int turn;
     private int maxturn;
+
+    public int Points = 0 ;
+
     private PropertyChangeSupport support;
 
     public Thread getThread() {
@@ -30,7 +33,10 @@ public abstract class Game implements Runnable{
 
     private Thread thread;
 
-    private long time = 1000;
+    private long time = 50;
+
+    private int capsuleTimer = 0;
+    private static final int CAPSULE_EFFECT_DURATION = 200;
 
 
     abstract void initializeGame();
@@ -91,8 +97,8 @@ public abstract class Game implements Runnable{
         int oldTurn = this.turn;
 
         turn++;
-        System.out.println("Tour");
         takeTurn();
+        System.out.println("Tour: " + turn);
         if(gameContinue() && maxturn == turn){
             isrunning = false;
             gameOver();
@@ -122,6 +128,22 @@ public abstract class Game implements Runnable{
         thread = new Thread(this);
         thread.start();
 
+    }
+
+
+
+    public int getCapsuleTimer() {
+        return capsuleTimer;
+    }
+
+    public void decrementCapsuleTimer() {
+        if(capsuleTimer > 0) {
+            capsuleTimer--;
+        }
+    }
+
+    public void resetCapsuleTimer() {
+        capsuleTimer = CAPSULE_EFFECT_DURATION;
     }
 
 }

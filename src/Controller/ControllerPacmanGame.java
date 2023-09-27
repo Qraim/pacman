@@ -13,6 +13,5 @@ public class ControllerPacmanGame {
         Maze maze = new Maze(str);
 
         PacmanGame game = new PacmanGame(50,maze);
-        //ViewPacmanGame vc = new ViewPacmanGame(game);
     }
 }

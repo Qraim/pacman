@@ -31,6 +31,8 @@ public class Maze implements Serializable, Cloneable {
 	private boolean food[][];
 	private boolean capsules[][];
 
+	public String filename;
+
 	/**
 	 * Les positions initiales des agents
 	 */
@@ -40,6 +42,7 @@ public class Maze implements Serializable, Cloneable {
 	public Maze(String filename) throws Exception {
 		try {
 			System.out.println("Layout file is " + filename);
+			this.filename = filename;
 			// Lecture du fichier pour determiner la taille du labyrinthe
 			InputStream ips = new FileInputStream(filename);
 			InputStreamReader ipsr = new InputStreamReader(ips);
@@ -159,10 +162,34 @@ public class Maze implements Serializable, Cloneable {
 		return (food[x][y]);
 	}
 
+	public boolean isGhost(int x, int y) {
+		for(PositionAgent pos : ghosts_start){
+			if(pos.getX() == x && pos.getY() == y)
+				return true;
+		}
+		return false;
+	}
+
+
 	public void setFood(int x, int y, boolean b) {
 		food[x][y] = b;
 	}
-	
+
+
+
+	public boolean StillFood()
+	{
+		for(int i=0; i<food.length; i++)
+		{
+			for(int j=0; j<food[i].length; j++)
+			{
+				if(food[i][j])
+					return true;
+			}
+		}
+        return false;
+    }
+
 
 	/**
 	 * Permet de savoir si il y a une capsule

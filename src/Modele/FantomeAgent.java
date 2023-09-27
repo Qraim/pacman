@@ -1,8 +1,8 @@
 package Modele;
 
 public class FantomeAgent extends Agent {
-    public FantomeAgent(PositionAgent position) {
-        super(position);
+    public FantomeAgent(PositionAgent position, Strategie strategie) {
+        super(position, strategie);
     }
 
 

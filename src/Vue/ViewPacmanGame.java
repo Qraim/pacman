@@ -21,7 +21,7 @@ public class ViewPacmanGame implements PropertyChangeListener {
 
     public ViewPacmanGame(PacmanGame PacmanGame) {
         this.game = PacmanGame;
-        game.launch();
+        //game.launch();
         panel = new PanelPacmanGame(game.getMaze());
 
         frame = new JFrame("Pacman Game");
@@ -33,12 +33,10 @@ public class ViewPacmanGame implements PropertyChangeListener {
 
         frame.setVisible(true);
 
-        // Supposons que PacmanGame envoie des notifications de changement de propriété.
-        // Ajoutez cette vue en tant qu'auditeur.
+
         game.addPropertyChangeListener(this);
     }
 
-    // Met à jour l'interface utilisateur pour refléter l'état actuel du jeu
     public void update(){
 
         ArrayList<PositionAgent> pacmans_pos = new ArrayList<>();

@@ -1,6 +1,6 @@
 package Modele;
 
 public interface AgentFactory {
-    Agent createAgent(PositionAgent position);
+    Agent createAgent(PositionAgent position, Strategie strategie);
 }
 
