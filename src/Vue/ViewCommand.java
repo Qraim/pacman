@@ -11,16 +11,16 @@ import java.beans.PropertyChangeListener;
 import java.util.Objects;
 
 public class ViewCommand implements PropertyChangeListener {
-    private JFrame frame;
-    private JButton initButton;
-    private JButton startButton;
-    private JButton pauseButton;
-    private JButton stepbutton;
-    private JSlider speedSlider;
-    private JLabel turnLabel;
+    private final JFrame frame;
+    private final JButton initButton;
+    private final JButton startButton;
+    private final JButton pauseButton;
+    private final JButton stepbutton;
+    private final JSlider speedSlider;
+    private final JLabel turnLabel;
 
-    private JLabel pointlabel;
-    private Game simpleGame;
+    private final JLabel pointlabel;
+    private final Game simpleGame;
 
     public ViewCommand(Game simpleGame) {
         this.simpleGame = simpleGame;

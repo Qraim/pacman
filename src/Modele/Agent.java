@@ -1,15 +1,24 @@
 package Modele;
 
+import Strategies.Strategie;
+
 public abstract class Agent {
     protected PositionAgent position;
     protected AgentAction currentAction;
 
     protected Strategie strategie;
+    protected Strategie oldStrategie;
+
 
     public Agent(PositionAgent position, Strategie strategie) {
         this.strategie = strategie;
+        oldStrategie = strategie;
         this.position = position;
         this.currentAction = new AgentAction(AgentAction.STOP);
+    }
+
+    public void restorestrategie(){
+        this.strategie = oldStrategie;
     }
 
     public PositionAgent getPosition() {

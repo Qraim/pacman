@@ -21,15 +21,15 @@ public class Maze implements Serializable, Cloneable {
 	public static int WEST = 3;
 	public static int STOP = 4;
 
-	private int size_x;
-	private int size_y;
+	private final int size_x;
+	private final int size_y;
 
 	/**
 	 * Les elements du labyrinthe
 	 */
-	private boolean walls[][];
-	private boolean food[][];
-	private boolean capsules[][];
+	private final boolean[][] walls;
+	private final boolean[][] food;
+	private final boolean[][] capsules;
 
 	public String filename;
 
@@ -83,18 +83,9 @@ public class Maze implements Serializable, Cloneable {
 				ligne = ligne.trim();
 
 				for (int x = 0; x < ligne.length(); x++) {
-					if (ligne.charAt(x) == '%')
-						walls[x][y] = true;
-					else
-						walls[x][y] = false;
-					if (ligne.charAt(x) == '.')
-						food[x][y] = true;
-					else
-						food[x][y] = false;
-					if (ligne.charAt(x) == 'o')
-						capsules[x][y] = true;
-					else
-						capsules[x][y] = false;
+                    walls[x][y] = ligne.charAt(x) == '%';
+                    food[x][y] = ligne.charAt(x) == '.';
+                    capsules[x][y] = ligne.charAt(x) == 'o';
 					if (ligne.charAt(x) == 'P') {
 						pacman_start.add(new PositionAgent(x, y, Maze.NORTH));
 					}
@@ -272,9 +263,5 @@ public class Maze implements Serializable, Cloneable {
 	}
 
 
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		return (Maze) super.clone();
-	}
 	
 }

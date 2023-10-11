@@ -2,13 +2,15 @@ package Modele;
 
 import java.util.ArrayList;
 import java.util.List;
+import Strategies.*;
+
 public class PacmanGame extends Game {
 
-    private String backupmaze;
+    private final String backupmaze;
 
-    private int pacmanlife = 3;
-    private Maze maze;
-    private ArrayList<Agent> agents;
+    private final int pacmanlife = 3;
+    private final Maze maze;
+    private final ArrayList<Agent> agents;
 
 
     public PacmanGame(int maxturn, Maze maze) {
@@ -30,20 +32,6 @@ public class PacmanGame extends Game {
     @Override
     public void initializeGame() {
 
-        if(pacmanlife <= 0){
-            System.out.println("Vous avez perdu");
-            System.exit(0);
-        }
-
-        pacmanlife--;
-
-        try {
-            maze = new Maze(backupmaze);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        Points = 0;
-        setTurn(0);
         agents.clear();
 
         AgentFactory pacmanFactory = new PacmanFactory();
@@ -68,7 +56,6 @@ public class PacmanGame extends Game {
     void takeTurn() {
         List<Agent> toRemove = new ArrayList<>();
 
-        // Cloner la liste agents pour la boucle
         List<Agent> agentsClone = new ArrayList<>(agents);
         for (Agent agent : agentsClone) {
             Agent potentialRemove = moveAgent(agent);
@@ -79,7 +66,6 @@ public class PacmanGame extends Game {
         agents.removeAll(toRemove);
         decrementCapsuleTimer();
     }
-
 
 
     @Override
@@ -127,6 +113,13 @@ public class PacmanGame extends Game {
             resetCapsuleTimer();
         }
 
+        if(getCapsuleTimer() >0){
+            ghostcared(true);
+        } else {
+            ghostcared(false);
+        }
+
+
         Agent ghost = getGhostAtPosition(x, y);
         if(ghost != null){
             if(getCapsuleTimer() > 0) {
@@ -142,20 +135,22 @@ public class PacmanGame extends Game {
         return null;
     }
 
-    private Agent handleGhostActions(int x, int y) {
-        PositionAgent pacmanPos = GetPacmanPos();
+    private Agent handleGhostActions(int x, int y ) {
+        List<PositionAgent> pacmanPositions = GetPacmanPos();
         Agent ghost = getGhostAtPosition(x, y);
 
-        if(x == pacmanPos.getX() && y == pacmanPos.getY()){
-            if(getCapsuleTimer() > 0) {
-                System.out.println("Manger fantome");
-                Points = Points + 10;
-                return ghost;
+        for (PositionAgent pacmanPos : pacmanPositions) {
+            if (x == pacmanPos.getX() && y == pacmanPos.getY()) {
+                if (getCapsuleTimer() > 0) {
+                    System.out.println("Manger fantome");
+                    Points = Points + 10;
+                    return ghost;
 
-            } else {
-                System.out.println("Pacman est mort");
-                gameOver();
-                return null;
+                } else {
+                    System.out.println("Pacman est mort");
+                    gameOver();
+                    return null;
+                }
             }
         }
         return null;
@@ -185,23 +180,40 @@ public class PacmanGame extends Game {
         return null;
     }
 
-
-    public PositionAgent GetPacmanPos(){
+    private void ghostcared(Boolean scared){
         for(Agent agent : agents){
-            if(agent instanceof PacmanAgent){
-                return agent.position;
+            if(agent instanceof FantomeAgent) {
+                if(scared){
+                    agent.setStrategie(new FleePacmanStrategy(GetPacmanPos()));
+                } else {
+                    agent.restorestrategie();
+                }
             }
         }
-        return null;
+    }
+
+
+    public ArrayList<PositionAgent> GetPacmanPos(){
+
+        ArrayList<PositionAgent> pacman_pos = new ArrayList<PositionAgent>();
+        for(Agent agent : agents){
+            if(agent instanceof PacmanAgent){
+                pacman_pos.add(agent.position);
+                System.out.println("pacman trouvé");
+            }
+        }
+        return pacman_pos;
     }
 
     public ArrayList<PositionAgent> GetGhostPos(){
-        ArrayList<PositionAgent> ghost_pos = new ArrayList<>();
-        for (Agent agent : agents) {
-            ghost_pos.add(agent.getPosition());
+        ArrayList<PositionAgent> ghosts_pos = new ArrayList<PositionAgent>();
+        for(Agent agent : agents){
+            if(agent instanceof FantomeAgent){
+                ghosts_pos.add(agent.position);
+                System.out.println("pacman trouvé");
+            }
         }
-        ghost_pos.remove(0);
-        return ghost_pos;
+        return ghosts_pos;
     }
 
 }

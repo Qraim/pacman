@@ -11,7 +11,7 @@ public abstract class Game implements Runnable{
 
     public int Points = 0 ;
 
-    private PropertyChangeSupport support;
+    private final PropertyChangeSupport support;
 
     public Thread getThread() {
         return thread;
@@ -36,7 +36,7 @@ public abstract class Game implements Runnable{
     private long time = 50;
 
     private int capsuleTimer = 0;
-    private static final int CAPSULE_EFFECT_DURATION = 200;
+    private static final int CAPSULE_EFFECT_DURATION = 30;
 
 
     abstract void initializeGame();

@@ -33,8 +33,6 @@ public class Test {
 
 
 //        game.initializeGame();
-//
-//
 //        game.launch();
 
     }

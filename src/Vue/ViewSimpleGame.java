@@ -8,9 +8,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import Modele.*;
 public class ViewSimpleGame implements PropertyChangeListener {
-    private JFrame frame;
-    private JLabel label;
-    private Game simpleGame;
+    private final JFrame frame;
+    private final JLabel label;
+    private final Game simpleGame;
 
     public ViewSimpleGame(Game simpleGame) {
         this.simpleGame = simpleGame;

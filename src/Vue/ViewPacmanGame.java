@@ -13,11 +13,11 @@ import java.util.ArrayList;
 
 public class ViewPacmanGame implements PropertyChangeListener {
 
-    private JFrame frame;
+    private final JFrame frame;
     private JLabel label;
 
-    private PanelPacmanGame panel;
-    private PacmanGame game;
+    private final PanelPacmanGame panel;
+    private final PacmanGame game;
 
     public ViewPacmanGame(PacmanGame PacmanGame) {
         this.game = PacmanGame;
@@ -25,7 +25,7 @@ public class ViewPacmanGame implements PropertyChangeListener {
         panel = new PanelPacmanGame(game.getMaze());
 
         frame = new JFrame("Pacman Game");
-        frame.setSize(700, 700);
+        frame.setSize(game.getMaze().getSizeX() * 50, game.getMaze().getSizeY() * 50);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
@@ -33,19 +33,24 @@ public class ViewPacmanGame implements PropertyChangeListener {
 
         frame.setVisible(true);
 
-
         game.addPropertyChangeListener(this);
     }
 
     public void update(){
 
-        ArrayList<PositionAgent> pacmans_pos = new ArrayList<>();
-        pacmans_pos.add(game.GetPacmanPos());
+        ArrayList<PositionAgent> pacmans_pos = game.GetPacmanPos();
+
         panel.setPacmans_pos(pacmans_pos);
 
         panel.setGhosts_pos(game.GetGhostPos());
 
         panel.repaint();
+
+        if(game.getCapsuleTimer()>0){
+            panel.setGhostsScarred(true);
+        } else {
+            panel.setGhostsScarred(false);
+        }
 
     }
 

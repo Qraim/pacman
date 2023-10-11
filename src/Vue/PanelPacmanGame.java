@@ -17,20 +17,20 @@ public class PanelPacmanGame extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private Color wallColor = Color.BLUE;
-	private Color wallColor2 = Color.CYAN;
+	private final Color wallColor = Color.BLUE;
+	private final Color wallColor2 = Color.CYAN;
 
-	private double sizePacman = 1.1;
-	private Color pacmansColor = Color.yellow;
+	private final double sizePacman = 1.1;
+	private final Color pacmansColor = Color.yellow;
 
-	private Color ghostsColor = Color.white;
-	private Color ghostScarredColor = Color.pink;
+	private final Color ghostsColor = Color.white;
+	private final Color ghostScarredColor = Color.BLUE;
 
-	private double sizeFood = 0.3;
-	private Color colorFood = Color.white;
+	private final double sizeFood = 0.3;
+	private final Color colorFood = Color.white;
 
-	private double sizeCapsule = 0.7;
-	private Color colorCapsule = Color.red;
+	private final double sizeCapsule = 0.7;
+	private final Color colorCapsule = Color.red;
 
 	private Maze m;
 
