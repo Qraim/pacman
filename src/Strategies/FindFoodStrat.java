@@ -1,7 +1,9 @@
 package Strategies;
 
-import Modele.Agent;
-import Modele.AgentAction;
+import Agent.Agent;
+import Agent.AgentAction;
+import Agent.PositionAgent;
+
 import Modele.Maze;
 import java.util.ArrayList;
 
@@ -47,6 +49,11 @@ public class FindFoodStrat extends Strategie {
         }
 
         return null; // Si rien d'autre ne fonctionne
+    }
+
+    @Override
+    public void setPacmansPos(ArrayList<PositionAgent> pacmansPos) {
+
     }
 
     private boolean isOpposite(AgentAction action1, AgentAction action2) {

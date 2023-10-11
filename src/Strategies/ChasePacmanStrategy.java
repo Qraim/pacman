@@ -1,18 +1,18 @@
 package Strategies;
 
-import Agent.Agent;
-import Agent.AgentAction;
+import Agent.*;
 import Modele.Maze;
-import Agent.PositionAgent;
+
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-public class FleePacmanStrategy extends Strategie {
+public class ChasePacmanStrategy extends Strategie {
 
     private ArrayList<PositionAgent> pacmans_pos;
 
-    public FleePacmanStrategy(ArrayList<PositionAgent> pacmansPos) {
+    public ChasePacmanStrategy(ArrayList<PositionAgent> pacmansPos) {
         this.pacmans_pos = pacmansPos;
     }
 
@@ -20,24 +20,57 @@ public class FleePacmanStrategy extends Strategie {
     public AgentAction getAction(Agent agent, Maze maze) {
         PositionAgent ghostPosition = agent.getPosition();
 
+        // Trouver le Pac-Man le plus proche
         PositionAgent closestPacman = findClosestPacman(ghostPosition, this.pacmans_pos);
 
         List<AgentAction> possibleActions = getPossibleActions(ghostPosition, maze);
 
         AgentAction bestAction = null;
-        double maxDistance = -1;
+        double minDistance = Double.MAX_VALUE;
         for (AgentAction action : possibleActions) {
             PositionAgent newPosition = getNewPosition(ghostPosition, action);
+
+            // Vérifiez si le nouveau mouvement mène à une impasse
+            if (isDeadEnd(newPosition, maze)) {
+                continue; // ignore les mouvements qui mènent à des impasses
+            }
+
+            // Calculer la distance entre la nouvelle position et le Pac-Man le plus proche
             double distance = calculateDistance(newPosition, closestPacman);
 
-            if (distance > maxDistance) {
-                maxDistance = distance;
+            // Choisir l'action qui minimise la distance
+            if (distance < minDistance) {
+                minDistance = distance;
                 bestAction = action;
             }
         }
 
+        // Si toutes les actions possibles mènent à une impasse, choisir une au hasard
+        if (bestAction == null && !possibleActions.isEmpty()) {
+            bestAction = possibleActions.get(new Random().nextInt(possibleActions.size()));
+        }
+
         return bestAction;
     }
+
+    private boolean isDeadEnd(PositionAgent position, Maze maze) {
+        int x = position.getX();
+        int y = position.getY();
+
+        // Compter les directions possibles où l'agent peut se déplacer
+        int countPossibleDirections = 0;
+
+        // Vérifier chaque direction possible
+        if (!maze.isWall(x, y - 1)) countPossibleDirections++; // Nord
+        if (!maze.isWall(x, y + 1)) countPossibleDirections++; // Sud
+        if (!maze.isWall(x - 1, y)) countPossibleDirections++; // Ouest
+        if (!maze.isWall(x + 1, y)) countPossibleDirections++; // Est
+
+        // S'il n'y a qu'une seule direction possible, c'est une impasse
+        return countPossibleDirections <= 1;
+    }
+
+
 
     public void setPacmansPos(ArrayList<PositionAgent> pacmansPos) {
         this.pacmans_pos = pacmansPos;

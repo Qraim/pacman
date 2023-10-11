@@ -1,5 +1,7 @@
 package Modele;
 
+import Agent.PositionAgent;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -97,7 +99,7 @@ public class Maze implements Serializable, Cloneable {
 			}
 			br.close();
 
-			if (pacman_start.size() == 0)
+			if (pacman_start.isEmpty())
 				throw new Exception("Wrong input format: must specify a Pacman start");
 
 			// On verifie que le labyrinthe est clos
@@ -263,5 +265,9 @@ public class Maze implements Serializable, Cloneable {
 	}
 
 
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 	
 }

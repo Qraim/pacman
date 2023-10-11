@@ -1,5 +1,6 @@
-package Modele;
+package Agent;
 
+import Modele.Maze;
 import Strategies.Strategie;
 
 public abstract class Agent {

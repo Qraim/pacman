@@ -1,5 +1,7 @@
-package Modele;
+package Factory;
 
+import Agent.Agent;
+import Agent.PositionAgent;
 import Strategies.Strategie;
 
 public interface AgentFactory {

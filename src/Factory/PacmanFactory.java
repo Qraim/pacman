@@ -1,5 +1,8 @@
-package Modele;
+package Factory;
 
+import Agent.Agent;
+import Agent.PacmanAgent;
+import Agent.PositionAgent;
 import Strategies.Strategie;
 
 public class PacmanFactory implements AgentFactory {

@@ -1,4 +1,4 @@
-package Modele;
+package Agent;
 
 import Strategies.Strategie;
 

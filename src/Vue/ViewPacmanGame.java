@@ -1,8 +1,7 @@
 package Vue;
 
-import Modele.Game;
 import Modele.PacmanGame;
-import Modele.PositionAgent;
+import Agent.PositionAgent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -46,11 +45,7 @@ public class ViewPacmanGame implements PropertyChangeListener {
 
         panel.repaint();
 
-        if(game.getCapsuleTimer()>0){
-            panel.setGhostsScarred(true);
-        } else {
-            panel.setGhostsScarred(false);
-        }
+        panel.setGhostsScarred(game.getCapsuleTimer() > 0);
 
     }
 

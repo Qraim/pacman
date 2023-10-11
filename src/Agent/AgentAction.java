@@ -1,4 +1,4 @@
-package Modele;
+package Agent;
 
 public class AgentAction {
 	private int _vx;
