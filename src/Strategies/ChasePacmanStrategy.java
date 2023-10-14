@@ -96,6 +96,14 @@ public class ChasePacmanStrategy extends Strategie {
     }
 
     private double calculateDistance(PositionAgent a, PositionAgent b) {
+        if(a==null){
+            return 0;
+        }
+
+        if(b==null){
+            return 0;
+        }
+
         return Math.abs(a.getX() - b.getX()) + Math.abs(a.getY() - b.getY());
     }
 

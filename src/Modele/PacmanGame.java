@@ -39,8 +39,8 @@ public class PacmanGame extends Game {
         AgentFactory pacmanFactory = new PacmanFactory();
         AgentFactory ghostFactory = new GhostFactory();
 
-        Strategie pacmanStrat = new KeyboardStrat();
-        Strategie ghostStrat = new ChasePacmanStrategy(GetPacmanPos());
+        Strategie pacmanStrat = new RandomStrat();
+        Strategie ghostStrat = new RandomStrat();
 
         ArrayList<PositionAgent> pacmanStartPositions = maze.getPacman_start();
         for (PositionAgent pos : pacmanStartPositions) {
@@ -55,7 +55,7 @@ public class PacmanGame extends Game {
         }
     }
 
-    void takeTurn() {
+    synchronized void  takeTurn() {
         List<Agent> toRemove = new ArrayList<>();
 
         List<Agent> agentsClone = new ArrayList<>(agents);
@@ -92,6 +92,12 @@ public class PacmanGame extends Game {
         int y = agent.getPosition().getY();
 
         ghostcared(getCapsuleTimer() > 0);
+
+        if(GetPacmanPos().isEmpty()){
+            System.out.println("Pacman est mort");
+            gameOver();
+            return null;
+        }
 
         if (agent instanceof PacmanAgent) {
             return handlePacmanActions(x, y);

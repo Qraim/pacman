@@ -31,10 +31,6 @@ public class Test {
         ViewPacmanGame view = new ViewPacmanGame(game);
 
 
-
-//        game.initializeGame();
-//        game.launch();
-
     }
 
 }
