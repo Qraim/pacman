@@ -16,7 +16,7 @@ public class Test {
         fileChooser.setFileFilter(filter);
         int returnValue = fileChooser.showOpenDialog(frame);
 
-        String str = null;
+        String str = "";
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             str = fileChooser.getSelectedFile().getAbsolutePath();
         } else {
@@ -29,7 +29,6 @@ public class Test {
 
         ViewCommand Test = new ViewCommand(game);
         ViewPacmanGame view = new ViewPacmanGame(game);
-
 
     }
 

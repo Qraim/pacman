@@ -10,6 +10,4 @@ public class PacmanFactory implements AgentFactory {
     public Agent createAgent(PositionAgent position, Strategie strategie) {
         return new PacmanAgent(position,strategie);
     }
-
-
 }

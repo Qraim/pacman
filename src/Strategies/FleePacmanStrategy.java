@@ -12,12 +12,19 @@ public class FleePacmanStrategy extends Strategie {
 
     private ArrayList<PositionAgent> pacmans_pos;
 
+    private int tours = 1;
+
     public FleePacmanStrategy(ArrayList<PositionAgent> pacmansPos) {
         this.pacmans_pos = pacmansPos;
     }
 
     @Override
     public AgentAction getAction(Agent agent, Maze maze) {
+        tours++;
+        if(tours%2==0){
+            return new AgentAction(Maze.STOP);
+        }
+
         PositionAgent ghostPosition = agent.getPosition();
 
         PositionAgent closestPacman = findClosestPacman(ghostPosition, this.pacmans_pos);

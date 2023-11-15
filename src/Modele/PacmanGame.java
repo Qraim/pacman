@@ -11,24 +11,19 @@ import Strategies.*;
 
 public class PacmanGame extends Game {
 
-
     private final Maze maze;
-    private final ArrayList<Agent> agents;
 
+    private final ArrayList<Agent> agents;
 
     public PacmanGame(int maxturn, Maze maze) {
         super(maxturn);
         this.maze = maze;
-        this.agents = new ArrayList<>();
+        this.agents = new ArrayList<Agent>();
         initializeGame();
     }
 
     public Maze getMaze() {
         return maze;
-    }
-
-    public ArrayList<Agent> getAgents() {
-        return agents;
     }
 
     @Override
@@ -39,8 +34,8 @@ public class PacmanGame extends Game {
         AgentFactory pacmanFactory = new PacmanFactory();
         AgentFactory ghostFactory = new GhostFactory();
 
-        Strategie pacmanStrat = new RandomStrat();
-        Strategie ghostStrat = new RandomStrat();
+        Strategie pacmanStrat = new KeyboardStrat();
+        Strategie ghostStrat = new ChasePacmanStrategy(GetPacmanPos());
 
         ArrayList<PositionAgent> pacmanStartPositions = maze.getPacman_start();
         for (PositionAgent pos : pacmanStartPositions) {
@@ -55,7 +50,7 @@ public class PacmanGame extends Game {
         }
     }
 
-    synchronized void  takeTurn() {
+    synchronized void takeTurn() {
         List<Agent> toRemove = new ArrayList<>();
 
         List<Agent> agentsClone = new ArrayList<>(agents);
@@ -69,7 +64,6 @@ public class PacmanGame extends Game {
         decrementCapsuleTimer();
     }
 
-
     @Override
     boolean gameContinue() {
         return true;
@@ -81,20 +75,14 @@ public class PacmanGame extends Game {
         System.exit(0);
     }
 
-    public void addAgent(Agent agent) {
-        agents.add(agent);
-    }
-
-
     private Agent moveAgent(Agent agent){
         AgentAction action = agent.move(maze);
         int x = agent.getPosition().getX();
         int y = agent.getPosition().getY();
 
-        ghostcared(getCapsuleTimer() > 0);
+        ghostScared(getCapsuleTimer() > 0);
 
         if(GetPacmanPos().isEmpty()){
-            System.out.println("Pacman est mort");
             gameOver();
             return null;
         }
@@ -107,7 +95,6 @@ public class PacmanGame extends Game {
 
 
     }
-
 
     private Agent handlePacmanActions(int x, int y) {
         if(maze.isFood(x, y)){
@@ -124,19 +111,23 @@ public class PacmanGame extends Game {
 
         Agent ghost = getGhostAtPosition(x, y);
         if(ghost != null){
-            if(getCapsuleTimer() > 0) {
-                System.out.println("Manger fantome");
-                Points = Points + 10;
-                return ghost;
-            } else {
-                if(GetPacmanPos().isEmpty()){
-                    System.out.println("Pacman est mort");
-                    gameOver();
-                }
-                return getPacmanAtPosition(x, y);
-            }
+            return getAgent(x, y, ghost);
         }
         return null;
+    }
+
+    private Agent getAgent(int x, int y, Agent ghost) {
+        if(getCapsuleTimer() > 0) {
+            System.out.println("Manger fantome");
+            Points = Points + 10;
+            return ghost;
+        } else {
+            if(GetPacmanPos().isEmpty()){
+                System.out.println("Pacman est mort");
+                gameOver();
+            }
+            return getPacmanAtPosition(x, y);
+        }
     }
 
     private Agent handleGhostActions(int x, int y ) {
@@ -145,36 +136,10 @@ public class PacmanGame extends Game {
 
         for (PositionAgent pacmanPos : pacmanPositions) {
             if (x == pacmanPos.getX() && y == pacmanPos.getY()) {
-                if (getCapsuleTimer() > 0) {
-                    System.out.println("Manger fantome");
-                    Points = Points + 10;
-                    return ghost;
-
-                } else {
-                    if(GetPacmanPos().isEmpty()){
-                        System.out.println("Pacman est mort");
-                        gameOver();
-                    }
-                    return getPacmanAtPosition(x, y);
-                }
+                return getAgent(x, y, ghost);
             }
         }
         return null;
-    }
-
-
-    public boolean StillFood(){
-        return maze.StillFood();
-    }
-
-
-    private boolean isGhost(int x, int y){
-        for(Agent agent : agents){
-            if(agent instanceof FantomeAgent && agent.getPosition().getX() == x && agent.getPosition().getY() == y){
-                return true;
-            }
-        }
-        return false;
     }
 
     private Agent getGhostAtPosition(int x, int y) {
@@ -195,15 +160,28 @@ public class PacmanGame extends Game {
         return null;
     }
 
-    private void ghostcared(Boolean scared){
-        for(Agent agent : agents){
-            ArrayList<PositionAgent> pacman_pos = GetPacmanPos();
-            agent.getStrategie().setPacmansPos(pacman_pos);
-            if(agent instanceof FantomeAgent) {
-                if(scared){
-                    agent.setStrategie(new FleePacmanStrategy(pacman_pos));
-                } else {
-                    agent.restorestrategie();
+    private void ghostScared(Boolean scared) {
+
+        for (Agent agent : agents) {
+
+            if (agent instanceof FantomeAgent) {
+
+
+                ArrayList<PositionAgent> pacman_pos = GetPacmanPos();
+                agent.getStrategie().setPacmansPos(pacman_pos);
+                FantomeAgent fantome = (FantomeAgent) agent;
+
+                // Vérifier si l'état actuel est différent de l'état désiré
+                if (fantome.isIscared() != scared) {
+
+                    if (scared) {
+                        agent.setStrategie(new FleePacmanStrategy(pacman_pos));
+                    } else {
+                        agent.restorestrategie();
+                    }
+
+                    // Mettre à jour l'état du fantôme
+                    fantome.setIscared(scared);
                 }
             }
         }

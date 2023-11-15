@@ -20,16 +20,14 @@ public class ViewPacmanGame implements PropertyChangeListener {
 
     public ViewPacmanGame(PacmanGame PacmanGame) {
         this.game = PacmanGame;
-        //game.launch();
+
         panel = new PanelPacmanGame(game.getMaze());
 
         frame = new JFrame("Pacman Game");
         frame.setSize(game.getMaze().getSizeX() * 50, game.getMaze().getSizeY() * 50);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
-
         frame.add(panel);
-
         frame.setVisible(true);
 
         game.addPropertyChangeListener(this);
@@ -43,9 +41,9 @@ public class ViewPacmanGame implements PropertyChangeListener {
 
         panel.setGhosts_pos(game.GetGhostPos());
 
-        panel.repaint();
-
         panel.setGhostsScarred(game.getCapsuleTimer() > 0);
+
+        panel.repaint();
 
     }
 

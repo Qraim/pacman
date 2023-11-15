@@ -7,6 +7,7 @@ import java.beans.PropertyChangeListener;
 public abstract class Game implements Runnable{
 
     private int turn;
+
     private int maxturn;
 
     public int Points = 0 ;
@@ -36,8 +37,8 @@ public abstract class Game implements Runnable{
     private long time = 50;
 
     private int capsuleTimer = 0;
-    private static final int CAPSULE_EFFECT_DURATION = 30;
 
+    private static final int CAPSULE_EFFECT_DURATION = 20;
 
     abstract void initializeGame();
 
@@ -129,8 +130,6 @@ public abstract class Game implements Runnable{
         thread.start();
 
     }
-
-
 
     public int getCapsuleTimer() {
         return capsuleTimer;

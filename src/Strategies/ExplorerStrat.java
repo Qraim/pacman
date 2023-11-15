@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Random;
 
 public class ExplorerStrat extends Strategie {
-    private boolean[][] visited;
+    private final boolean[][] visited;
     private AgentAction lastAction = null;
 
     public ExplorerStrat(int mazeSizeX, int mazeSizeY) {
