@@ -201,7 +201,7 @@ public class Maze implements Serializable, Cloneable {
 	/**
 	 * Renvoie le nombre de pacmans
 	 * 
-	 * @return
+	 * @return the number of pacmans at the start
 	 */
 	public int getInitNumberOfPacmans() {
 		return (pacman_start.size());
@@ -210,7 +210,7 @@ public class Maze implements Serializable, Cloneable {
 	/**
 	 * Renvoie le nombre de fantomes
 	 * 
-	 * @return
+	 * @return the number of ghost at the start
 	 */
 	public int getInitNumberOfGhosts() {
 		return (ghosts_start.size());
@@ -233,35 +233,35 @@ public class Maze implements Serializable, Cloneable {
 	}
 
 	public String toString() {
-		String s = "Modele.Maze\n";
-		s += plateauToString();
-		s += "\nPosition agents fantom :";
+		StringBuilder s = new StringBuilder("Modele.Maze\n");
+		s.append(plateauToString());
+		s.append("\nPosition agents fantom :");
 		for (PositionAgent pa : ghosts_start) {
-			s += pa + " ";
+			s.append(pa).append(" ");
 		}
-		s += "\nPosition agents pacman :";
+		s.append("\nPosition agents pacman :");
 		for (PositionAgent pa : pacman_start) {
-			s += pa + " ";
+			s.append(pa).append(" ");
 		}
-		return s;
+		return s.toString();
 	}
 
 	public String plateauToString() {
-		String s = "";
+		StringBuilder s = new StringBuilder();
 		for (int i = 0; i < size_x; i++) {
 			for (int j = 0; j < size_y; j++) {
 				if (walls[i][j])
-					s += "X";
+					s.append("X");
 				else if (food[i][j])
-					s += "f";
+					s.append("f");
 				else if (capsules[i][j])
-					s += "c";
+					s.append("c");
 				else
-					s += " ";
+					s.append(" ");
 			}
-			s += "\n";
+			s.append("\n");
 		}
-		return s;
+		return s.toString();
 	}
 
 

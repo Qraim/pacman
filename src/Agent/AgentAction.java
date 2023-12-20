@@ -36,11 +36,8 @@ public class AgentAction {
 			_vx = -1;
 			_vy = 0;
 			break;
-		case STOP:
-			_vx = 0;
-			_vy = 0;
-			break;
-		default:
+            case STOP:
+            default:
 			_vx = 0;
 			_vy = 0;
 			break;

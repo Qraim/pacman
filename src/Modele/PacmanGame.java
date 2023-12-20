@@ -1,13 +1,16 @@
 package Modele;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import Agent.*;
 import Factory.AgentFactory;
 import Factory.GhostFactory;
 import Factory.PacmanFactory;
-import Strategies.*;
+import Strategies.ChasePacmanStrategy;
+import Strategies.FleePacmanStrategy;
+import Strategies.KeyboardStrat;
+import Strategies.Strategie;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PacmanGame extends Game {
 
@@ -56,7 +59,7 @@ public class PacmanGame extends Game {
         List<Agent> agentsClone = new ArrayList<>(agents);
         for (Agent agent : agentsClone) {
             Agent potentialRemove = moveAgent(agent);
-            if(potentialRemove != null){
+            if (potentialRemove != null) {
                 toRemove.add(potentialRemove);
             }
         }
@@ -75,14 +78,14 @@ public class PacmanGame extends Game {
         System.exit(0);
     }
 
-    private Agent moveAgent(Agent agent){
+    private Agent moveAgent(Agent agent) {
         AgentAction action = agent.move(maze);
         int x = agent.getPosition().getX();
         int y = agent.getPosition().getY();
 
         ghostScared(getCapsuleTimer() > 0);
 
-        if(GetPacmanPos().isEmpty()){
+        if (GetPacmanPos().isEmpty()) {
             gameOver();
             return null;
         }
@@ -97,32 +100,32 @@ public class PacmanGame extends Game {
     }
 
     private Agent handlePacmanActions(int x, int y) {
-        if(maze.isFood(x, y)){
+        if (maze.isFood(x, y)) {
             maze.setFood(x, y, false);
             Points++;
-            if(!maze.StillFood()){
+            if (!maze.StillFood()) {
                 System.out.println("Vous avez gagné");
             }
-        } else if(maze.isCapsule(x, y)){
+        } else if (maze.isCapsule(x, y)) {
             maze.setCapsule(x, y, false);
             Points = Points + 5;
             resetCapsuleTimer();
         }
 
         Agent ghost = getGhostAtPosition(x, y);
-        if(ghost != null){
+        if (ghost != null) {
             return getAgent(x, y, ghost);
         }
         return null;
     }
 
     private Agent getAgent(int x, int y, Agent ghost) {
-        if(getCapsuleTimer() > 0) {
+        if (getCapsuleTimer() > 0) {
             System.out.println("Manger fantome");
             Points = Points + 10;
             return ghost;
         } else {
-            if(GetPacmanPos().isEmpty()){
+            if (GetPacmanPos().isEmpty()) {
                 System.out.println("Pacman est mort");
                 gameOver();
             }
@@ -130,7 +133,7 @@ public class PacmanGame extends Game {
         }
     }
 
-    private Agent handleGhostActions(int x, int y ) {
+    private Agent handleGhostActions(int x, int y) {
         List<PositionAgent> pacmanPositions = GetPacmanPos();
         Agent ghost = getGhostAtPosition(x, y);
 
@@ -143,8 +146,8 @@ public class PacmanGame extends Game {
     }
 
     private Agent getGhostAtPosition(int x, int y) {
-        for(Agent agent : agents){
-            if(agent instanceof FantomeAgent && agent.getPosition().getX() == x && agent.getPosition().getY() == y) {
+        for (Agent agent : agents) {
+            if (agent instanceof FantomeAgent && agent.getPosition().getX() == x && agent.getPosition().getY() == y) {
                 return agent;
             }
         }
@@ -152,8 +155,8 @@ public class PacmanGame extends Game {
     }
 
     private Agent getPacmanAtPosition(int x, int y) {
-        for(Agent agent : agents){
-            if(agent instanceof PacmanAgent && agent.getPosition().getX() == x && agent.getPosition().getY() == y) {
+        for (Agent agent : agents) {
+            if (agent instanceof PacmanAgent && agent.getPosition().getX() == x && agent.getPosition().getY() == y) {
                 return agent;
             }
         }
@@ -188,21 +191,21 @@ public class PacmanGame extends Game {
     }
 
 
-    public ArrayList<PositionAgent> GetPacmanPos(){
+    public ArrayList<PositionAgent> GetPacmanPos() {
 
         ArrayList<PositionAgent> pacman_pos = new ArrayList<PositionAgent>();
-        for(Agent agent : agents){
-            if(agent instanceof PacmanAgent){
+        for (Agent agent : agents) {
+            if (agent instanceof PacmanAgent) {
                 pacman_pos.add(agent.getPosition());
             }
         }
         return pacman_pos;
     }
 
-    public ArrayList<PositionAgent> GetGhostPos(){
+    public ArrayList<PositionAgent> GetGhostPos() {
         ArrayList<PositionAgent> ghosts_pos = new ArrayList<PositionAgent>();
-        for(Agent agent : agents){
-            if(agent instanceof FantomeAgent){
+        for (Agent agent : agents) {
+            if (agent instanceof FantomeAgent) {
                 ghosts_pos.add(agent.getPosition());
             }
         }
